@@ -1,6 +1,6 @@
-# Kubernetes setup with Ansible
+# PGCLUSTER setup with Ansible
 
-This project can be used to setup a kubernetes cluster with any number of nodes on remote servers.
+This project can be used to setup a 3-node pgcluster with patroni+etcd+vip-manager on remote servers.
 
 **_Note: Do not use on existing production servers._**
 
