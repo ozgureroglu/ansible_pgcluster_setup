@@ -1,0 +1,20 @@
+# Bu ansible dosyasi kubernetes kurma islemini hizlandirmak icin yapilmistir.
+
+# Burada tum kube nodelarini gostermektedir.
+[dbs]
+192.168.1.61 hostname=db1
+192.168.1.62 hostname=db2
+192.168.1.63 hostname=db3
+
+
+# Connection settings : Change depending on your target servers
+[all:vars]
+ansible_connection='ssh'
+ansible_ssh_port='22'
+ansible_user='vagrant'
+ansible_become=yes
+ansible_become_password='vagrant'
+ansible_become_method='sudo'
+ansible_ssh_pass='vagrant'  # "sshpass" package is required for use "ansible_ssh_pass"
+#ansible_ssh_private_key_file= ./files/id_rsa_pm_vm
+# ansible_python_interpreter='/usr/bin/python3'  # is required for use python3

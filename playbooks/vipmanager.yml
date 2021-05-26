@@ -1,0 +1,34 @@
+- hosts: dbs
+  vars_files:
+    - ../vars/main.yml
+  tasks:     
+
+  - name: Download vip-manager package
+    get_url:
+      url: https://github.com/cybertec-postgresql/vip-manager/releases/download/v1.0.1/vip-manager_1.0.1-1_amd64.deb
+      dest: /root/
+      
+
+  - name: Install a vip-manager.deb package
+    apt:
+      deb: /root/vip-manager_1.0.1-1_amd64.deb
+
+  - name: Enable vip-manager service
+    ansible.builtin.systemd:
+      name: vip-manager
+      enabled: yes
+
+  - name: Stop vip-manager service 
+    ansible.builtin.systemd:
+      name: vip-manager
+      state: stopped
+
+  - name: Generate conf file "/etc/default/vip-manager.yml"
+    template:
+      src: ../files/vip-manager.yml.j2
+      dest: /etc/default/vip-manager.yml
+
+  - name: Start vip-manager service 
+    ansible.builtin.systemd:
+      name: vip-manager
+      state: restarted

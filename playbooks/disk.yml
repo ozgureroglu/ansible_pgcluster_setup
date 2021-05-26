@@ -1,0 +1,47 @@
+---
+# Check /dev/sdb block and mount it under /glusterfs
+- hosts: dbs 
+  vars_files:
+    - ../vars/main.yml
+  tasks:     
+
+
+  - name: Install lvm packages
+    apt:
+      name: 'lvm2'
+      state: present
+
+  - name: Create list of mounted devices
+    set_fact:
+      mounted_devices: "{{ ansible_mounts|json_query('[].device') }}"
+
+
+  - name: Create a volume group on top of /dev/sdb
+    community.general.lvg:
+      vg: "{{vgname}}"
+      pvs: "{{ mount_src }}"
+    when: mount_src not in mounted_devices
+    
+  - name: Create a logical volume with full size
+    community.general.lvol:
+      vg: "{{vgname}}"  
+      lv: "{{volname}}"
+      size: +100%FREE
+    
+  - name: Create File System
+    filesystem:
+      fstype: ext4
+      dev: "/dev/{{vgname}}/{{volname}}"
+    when: mount_src not in mounted_devices
+
+  - name: Mount File System
+    mount:
+      path: "{{ mount_path }}"
+      src: "/dev/{{vgname}}/{{volname}}"
+      fstype: ext4
+      state: mounted
+    when: mount_src not in mounted_devices
+
+
+
+...

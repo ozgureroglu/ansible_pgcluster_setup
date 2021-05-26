@@ -1,0 +1,6 @@
+
+#- import_playbook: playbooks/disk.yml
+- import_playbook: playbooks/postgresql.yml
+- import_playbook: playbooks/etcd.yml
+- import_playbook: playbooks/patroni.yml
+- import_playbook: playbooks/vipmanager.yml

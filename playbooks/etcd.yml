@@ -1,0 +1,33 @@
+- hosts: dbs
+  tasks:     
+    
+  - name: Install etcd packages
+    apt:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - etcd
+      
+
+  - name: Enable etcd service
+    ansible.builtin.systemd:
+      name: etcd
+      enabled: yes
+      
+  - name: Stop etcd service
+    ansible.builtin.systemd:
+      name: etcd
+      state: stopped
+
+  - name: Generate conf file "/etc/etcd/etcd.conf"
+    template:
+      src: ../files/etcd.j2
+      dest: /etc/default/etcd
+
+
+  - name: Start etcd service
+    ansible.builtin.systemd:
+      name: etcd
+      state: started

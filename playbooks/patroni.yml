@@ -1,0 +1,44 @@
+- hosts: dbs 
+  vars_files:
+    - ../vars/main.yml
+  tasks:     
+
+
+  - name: Install patroni packages
+    apt:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - patroni
+
+  - name: Stop patroni service 
+    ansible.builtin.systemd:
+      name: patroni
+      state: stopped
+
+      
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: /data/patroni
+      state: directory
+      mode: '0700'
+      owner: postgres
+      group: postgres
+
+
+  - name: Generate conf file "/etc/patroni/patroni.yml"
+    template:
+      src: ../files/patroni.yml.j2
+      dest: /etc/patroni/config.yml
+
+  - name: Start patroni service 
+    ansible.builtin.systemd:
+      name: patroni
+      state: restarted
+
+  - name: Enable patroni service
+    ansible.builtin.systemd:
+      name: patroni
+      enabled: yes
