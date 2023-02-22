@@ -2,9 +2,9 @@
 
 # Burada tum kube nodelarini gostermektedir.
 [dbs]
-192.168.1.61 hostname=db1
-192.168.1.62 hostname=db2
-192.168.1.63 hostname=db3
+10.10.10.211 hostname=db1
+10.10.10.212 hostname=db2
+10.10.10.213 hostname=db3
 
 
 # Connection settings : Change depending on your target servers
